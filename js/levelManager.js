@@ -19,14 +19,15 @@ export function startLevel(currentLevel) {
   // Clear existing hives
   hives.length = 0;
 
-  // Adjust the number of hives based on the level, but ensure there's always at least one
-  const hivesToSpawn = Math.max(1, Math.min(currentLevel, 10));
+  // Spawn hives based on the current level
+  const hivesToSpawn = currentLevel;
   for (let i = 0; i < hivesToSpawn; i++) {
     const x = Math.random() * (MAP_WIDTH - 200) + 100;
     const y = Math.random() * (MAP_HEIGHT - 200) + 100;
     hives.push(new Hive(x, y, assetLoader));
   }
 
+  // Ensure there's always at least one hive
   if (hives.length === 0) {
     const x = MAP_WIDTH / 2;
     const y = MAP_HEIGHT / 2;
