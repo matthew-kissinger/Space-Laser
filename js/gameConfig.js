@@ -1,7 +1,7 @@
 export const SCALE_FACTOR = 3;
 export const SPAWN_RATE = 12000; // in milliseconds
-export const FIRE_RATE = 100; // in milliseconds
-export const LASER_SPEED = 10;
+export const FIRE_RATE = 200; // in milliseconds
+export const LASER_SPEED = 20;
 
 // Remove the MAX_LEVEL constant
 
