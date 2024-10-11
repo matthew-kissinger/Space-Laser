@@ -82,5 +82,3 @@ Space Laser is an advanced, browser-based space combat simulator set in the year
 ## Future Enhancements
 - WebGL rendering for improved performance
 - Multiplayer mode using WebSockets
-
-Space Laser pushes the boundaries of what's possible in browser-based gaming, combining cutting-edge web technologies with classic space combat gameplay. It's not just a game; it's a technical showcase of modern web development practices.
