@@ -51,17 +51,23 @@ const imagePaths = [
   'laser_tower.png',
 ];
 
-// Start the game
+// Load assets and initialize the game
 assetLoader.loadImages(imagePaths).then(() => {
   initializeGameObjects(assetLoader);
   initLevelManager(assetLoader);
   initRenderer(assetLoader);
-  initStartScreen(assetLoader);  // Add this line
+  initStartScreen(assetLoader);
   setupEventListeners(canvas, camera);
   setGameState(GameState.START);
-  startLevel(1);  // Start at level 1
-  soundManager.playBackground();  // Start background music
   gameLoop(ctx);
 }).catch(err => {
   console.error(err);
 });
+
+// Add this new function to start a new game
+export function startNewGame() {
+  initializeGameObjects(assetLoader);
+  setGameState(GameState.PLAYING);
+  startLevel(1);
+  soundManager.playBackground();
+}

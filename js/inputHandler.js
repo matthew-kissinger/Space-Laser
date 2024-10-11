@@ -5,6 +5,7 @@ import { handleStartScreenClick, isShowingInstructions } from './startScreen.js'
 import { player, base, laserTowers, useUpgrade, addUpgrade, assetLoader } from './gameObjects.js';
 import { LaserTower } from './laserTower.js';
 import { soundManager } from './soundManager.js'; // Add this import
+import { startNewGame } from './main.js';
 
 export const keys = {
   ArrowUp: false,
@@ -77,9 +78,7 @@ function handleMouseDown(e, canvas, camera) {
     const y = e.clientY - rect.top;
     const action = handleStartScreenClick(x, y, canvas.width, canvas.height);
     if (action === 'start') {
-      setGameState(GameState.PLAYING);
-      startLevel(1);
-      soundManager.playBackground(); // Add this line to start playing background music
+      startNewGame(); // Call the new function to start the game
     }
   } else {
     isMousePressed = true;

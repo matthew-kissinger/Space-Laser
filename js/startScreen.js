@@ -2,6 +2,7 @@
 
 import { getScore } from './gameObjects.js';
 import { WIDTH, HEIGHT } from './gameConfig.js';
+import { startNewGame } from './main.js';
 
 let showInstructions = false;
 let assetLoader;
@@ -197,6 +198,7 @@ export function handleStartScreenClick(x, y, WIDTH, HEIGHT) {
         }
     } else {
         if (isInside(x, y, WIDTH / 2 - 100, HEIGHT * 3 / 4 - 25, 200, 50)) {
+            startNewGame(); // Call the new function to start the game
             return 'start';
         } else if (isInside(x, y, WIDTH / 2 - 100, HEIGHT * 3 / 4 + 45, 200, 50)) {
             showInstructions = true;
