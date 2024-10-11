@@ -28,21 +28,21 @@ function drawHealthBars(ctx, player, base) {
   const baseHealthPercentage = base.health / 500;
 
   // Player Health Bar
-  drawBar(ctx, PADDING, PADDING, BAR_WIDTH, BAR_HEIGHT, playerHealthPercentage, '#4CAF50', '#1B5E20', 'Player');
+  drawBar(ctx, PADDING, PADDING, BAR_WIDTH, BAR_HEIGHT, playerHealthPercentage, '#4CAF50', '#1B5E20', 'ATLAS-7 Shield');
 
   // Base Health Bar
-  drawBar(ctx, PADDING, PADDING * 2 + BAR_HEIGHT, BAR_WIDTH, BAR_HEIGHT, baseHealthPercentage, '#2196F3', '#0D47A1', 'Base');
+  drawBar(ctx, PADDING, PADDING * 2 + BAR_HEIGHT, BAR_WIDTH, BAR_HEIGHT, baseHealthPercentage, '#2196F3', '#0D47A1', 'Base Integrity');
 }
 
 function drawBar(ctx, x, y, width, height, fillPercentage, fillColor, strokeColor, label) {
   // Draw label
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 16px Arial';
+  ctx.fillStyle = '#ADD8E6';
+  ctx.font = 'bold 16px "Orbitron", sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText(label, x, y - 5);
 
   // Draw background
-  ctx.fillStyle = '#333333';
+  ctx.fillStyle = 'rgba(173, 216, 230, 0.2)';
   roundRect(ctx, x, y, width, height, CORNER_RADIUS, true, false);
 
   // Draw fill
@@ -56,37 +56,38 @@ function drawBar(ctx, x, y, width, height, fillPercentage, fillColor, strokeColo
 }
 
 function drawLevelInfo(ctx) {
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 20px Arial';
+  ctx.fillStyle = '#FFD700';
+  ctx.font = 'bold 20px "Orbitron", sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText(`Level: ${level}`, PADDING, PADDING * 3 + BAR_HEIGHT * 2 + 30);
+  ctx.fillText(`Mission Level: ${level}`, PADDING, PADDING * 3 + BAR_HEIGHT * 2 + 30);
 }
 
 function drawUpgradeInfo(ctx) {
   const upgrades = getUpgrades();
   
   ctx.fillStyle = '#FFD700';
-  ctx.font = 'bold 20px Arial';
+  ctx.font = 'bold 20px "Orbitron", sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText(`Upgrades: ${upgrades}`, PADDING, PADDING * 4 + BAR_HEIGHT * 2 + 60);
+  ctx.fillText(`Available Upgrades: ${upgrades}`, PADDING, PADDING * 4 + BAR_HEIGHT * 2 + 60);
 
   if (upgrades > 0) {
-    ctx.font = 'bold 16px Arial';
+    ctx.font = 'bold 16px "Orbitron", sans-serif';
+    ctx.fillStyle = '#ADD8E6';
     let yOffset = 85;
     if (player.laserCount < player.maxLasers) {
-      ctx.fillText('1 (add laser)', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
+      ctx.fillText('1: Add Laser', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
       yOffset += 25;
     }
-    ctx.fillText('2 (add laser tower)', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
+    ctx.fillText('2: Add Laser Tower', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
     yOffset += 25;
-    ctx.fillText('3 (heal base)', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
+    ctx.fillText('3: Repair Base', PADDING, PADDING * 5 + BAR_HEIGHT * 2 + yOffset);
   }
 }
 
 function drawScore(ctx) {
   const score = getScore();
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 24px Arial';
+  ctx.fillStyle = '#FFD700';
+  ctx.font = 'bold 24px "Orbitron", sans-serif';
   ctx.textAlign = 'right';
   ctx.fillText(`Score: ${score}`, WIDTH - PADDING, PADDING + 24);
 }
@@ -101,8 +102,8 @@ function drawFPS(ctx) {
     lastTime = currentTime;
   }
 
-  ctx.fillStyle = '#00FF00'; // Bright green color
-  ctx.font = 'bold 16px Arial';
+  ctx.fillStyle = '#ADD8E6';
+  ctx.font = '16px "Orbitron", sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText(`FPS: ${fps}`, 10, HEIGHT - 10);
 }

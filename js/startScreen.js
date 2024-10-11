@@ -54,8 +54,13 @@ export function drawStartScreen(ctx, WIDTH, HEIGHT) {
     // Buttons
     drawButton(ctx, WIDTH / 2, HEIGHT * 3 / 4, 200, 50, 'Start Mission');
     drawButton(ctx, WIDTH / 2, HEIGHT * 3 / 4 + 70, 200, 50, 'Briefing');
-}
 
+    // Zoom Advisory
+    ctx.fillStyle = '#ADD8E6';
+    ctx.font = '16px "Orbitron", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('For optimal experience, set browser zoom to 100%', WIDTH / 2, HEIGHT - 20);
+}
 
 export function drawInstructionsScreen(ctx, WIDTH, HEIGHT) {
     // Space background
