@@ -1,8 +1,10 @@
 import { Player } from './player.js';
 import { Base } from './base.js';
 import { MAP_WIDTH, MAP_HEIGHT } from './gameConfig.js';
+import { ObjectPool } from './objectPool.js';
+import { Laser } from './laser.js';
 
-export let player, base, hives, aliens, lasers, powerUps, explosions, laserTowers, upgrades, assetLoader;
+export let player, base, hives, aliens, lasers, powerUps, explosions, laserTowers, upgrades, assetLoader, laserPool;
 
 let score = 0;
 
@@ -18,6 +20,7 @@ export function initializeGameObjects(loader) {
   laserTowers = [];
   upgrades = 0;
   score = 0;
+  laserPool = new ObjectPool(Laser);
 }
 
 export function addUpgrade() {

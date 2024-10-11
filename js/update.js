@@ -6,6 +6,7 @@ import { spawnAliens, spawnPowerUp } from './levelManager.js';
 import { Laser } from './laser.js';
 import { checkCollisions } from './collisionDetection.js';
 import { checkLevelCompletion } from './levelManager.js';
+import { laserPool } from './gameObjects.js';
 
 let lastShotTime = 0;
 
@@ -41,22 +42,32 @@ function updateCamera() {
 function handleShooting() {
   const currentTime = Date.now();
   if (isMousePressed && currentTime - lastShotTime > FIRE_RATE) {
+    console.log('Attempting to fire laser');
     const playerCenterX = player.x + player.width / 2;
     const playerCenterY = player.y + player.height / 2;
+    console.log('Mouse position:', mouseX, mouseY);
+    console.log('Player center:', playerCenterX, playerCenterY);
     const angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
+    console.log('Calculated angle:', angle);
     
-    player.fireLasers(lasers, Laser, angle);
+    player.fireLasers(lasers, angle);
     lastShotTime = currentTime;
   }
 }
 
 function updateLasers() {
-  lasers.forEach((laser, index) => {
+  console.log('Updating lasers. Count before update:', lasers.length);
+  for (let i = lasers.length - 1; i >= 0; i--) {
+    const laser = lasers[i];
     laser.update();
+    console.log(`Laser ${i} after update:`, laser);
     if (laser.isExpired()) {
-      lasers.splice(index, 1);
+      console.log(`Laser ${i} expired, removing`);
+      laserPool.release(laser);
+      lasers.splice(i, 1);
     }
-  });
+  }
+  console.log('Lasers count after update:', lasers.length);
 }
 
 function updateAliens() {

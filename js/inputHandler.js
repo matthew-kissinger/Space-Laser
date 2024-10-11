@@ -99,6 +99,7 @@ function updateMousePosition(e, canvas, camera) {
   const rect = canvas.getBoundingClientRect();
   mouseX = e.clientX - rect.left + camera.x;
   mouseY = e.clientY - rect.top + camera.y;
+  console.log('Mouse position updated:', mouseX, mouseY);
 }
 
 function togglePause() {

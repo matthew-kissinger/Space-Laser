@@ -11,11 +11,16 @@ const BAR_HEIGHT = 20;
 const BAR_WIDTH = 250;
 const CORNER_RADIUS = 5;
 
+let lastTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
 export function drawUI(ctx, player, base) {
   drawHealthBars(ctx, player, base);
   drawLevelInfo(ctx);
   drawUpgradeInfo(ctx);
   drawScore(ctx);
+  drawFPS(ctx); // Add this line
 }
 
 function drawHealthBars(ctx, player, base) {
@@ -84,6 +89,22 @@ function drawScore(ctx) {
   ctx.font = 'bold 24px Arial';
   ctx.textAlign = 'right';
   ctx.fillText(`Score: ${score}`, WIDTH - PADDING, PADDING + 24);
+}
+
+function drawFPS(ctx) {
+  const currentTime = performance.now();
+  frameCount++;
+
+  if (currentTime - lastTime >= 1000) {
+    fps = frameCount;
+    frameCount = 0;
+    lastTime = currentTime;
+  }
+
+  ctx.fillStyle = '#00FF00'; // Bright green color
+  ctx.font = 'bold 16px Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText(`FPS: ${fps}`, 10, HEIGHT - 10);
 }
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {

@@ -2,6 +2,7 @@
 import { clamp } from './utils.js';
 import { FIRE_RATE } from './gameConfig.js';
 import { soundManager } from './soundManager.js';
+import { laserPool } from './gameObjects.js';
 
 export class Player {
   constructor(x, y, assets) {
@@ -66,7 +67,7 @@ export class Player {
     return Array.from({ length: this.laserCount }, (_, i) => i * angleStep);
   }
 
-  fireLasers(lasers, Laser, angle) {
+  fireLasers(lasers, angle) {
     const currentTime = Date.now();
     const fireRate = this.laserPowerUpActive ? FIRE_RATE / 2 : FIRE_RATE;
     
@@ -76,12 +77,26 @@ export class Player {
     const centerY = this.y + this.height / 2;
     const angles = this.getLaserAngles();
     
-    angles.forEach(offsetAngle => {
+    angles.forEach((offsetAngle, index) => {
       const finalAngle = angle + offsetAngle;
-      const targetX = centerX + Math.cos(finalAngle) * 1000;
-      const targetY = centerY + Math.sin(finalAngle) * 1000;
-      lasers.push(new Laser(centerX, centerY, targetX, targetY, 10, null));
+      
+      const laserStartX = centerX + Math.cos(finalAngle) * (this.width / 2);
+      const laserStartY = centerY + Math.sin(finalAngle) * (this.height / 2);
+      
+      const targetX = laserStartX + Math.cos(finalAngle) * 1000;
+      const targetY = laserStartY + Math.sin(finalAngle) * 1000;
+      
+      console.log('Laser creation values:', {
+        centerX, centerY, finalAngle, laserStartX, laserStartY, targetX, targetY
+      });
+      
+      const laser = laserPool.get();
+      laser.init(laserStartX, laserStartY, targetX, targetY, 10);
+      lasers.push(laser);
+      console.log(`Laser ${index} created:`, laser);
     });
+
+    console.log('Total lasers after firing:', lasers.length);
 
     soundManager.playLaser();
     if (this.laserPowerUpActive) {

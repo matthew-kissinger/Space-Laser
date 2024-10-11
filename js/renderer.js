@@ -26,7 +26,7 @@ export function draw(ctx) {
   powerUps.forEach(powerUp => powerUp.draw(ctx, camera));
   player.draw(ctx, camera);
 
-  // Draw UI Elements
+  // Draw UI Elements (including FPS counter)
   drawUI(ctx, player, base);
 
   // Draw Minimap
@@ -34,6 +34,15 @@ export function draw(ctx) {
 
   // Debug: Log number of aliens
   console.log(`Number of aliens: ${aliens.length}`);
+
+  console.log('Drawing lasers. Count:', lasers.length);
+  console.log('Camera position:', camera.x, camera.y);
+  lasers.forEach((laser, index) => {
+    console.log(`Laser ${index}:`, laser);
+    laser.draw(ctx, camera);
+  });
+
+  // ... rest of the drawing code ...
 }
 
 function drawBackground(ctx) {
