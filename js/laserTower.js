@@ -1,5 +1,5 @@
 // js/laserTower.js
-import { Laser } from './laser.js';
+import { laserPool } from './gameObjects.js';
 import { soundManager } from './soundManager.js';
 
 export class LaserTower {
@@ -19,7 +19,15 @@ export class LaserTower {
       const target = this.findNearestAlien(aliens);
       if (target) {
         const angle = Math.atan2(target.y - this.y, target.x - this.x);
-        lasers.push(new Laser(this.x + this.width / 2, this.y + this.height / 2, this.x + Math.cos(angle) * 1000, this.y + Math.sin(angle) * 1000, 10, null));
+        const laserStartX = this.x + this.width / 2;
+        const laserStartY = this.y + this.height / 2;
+        const targetX = laserStartX + Math.cos(angle) * 1000;
+        const targetY = laserStartY + Math.sin(angle) * 1000;
+
+        const laser = laserPool.get();
+        laser.init(laserStartX, laserStartY, targetX, targetY, 10);
+        lasers.push(laser);
+
         this.lastFireTime = currentTime;
         soundManager.playLaser();
       }
