@@ -15,7 +15,6 @@ export class Laser {
         this.lifetime = 3000;
         this.isHit = false;
         this.hitPosition = null;
-        this.gradient = null; // Add this line
     }
 
     init(x, y, targetX, targetY, speed) {
@@ -27,31 +26,7 @@ export class Laser {
         this.creationTime = Date.now();
         this.isHit = false;
         this.hitPosition = null;
-        this.createGradient(); // Add this line
         console.log('Laser after init:', this);
-    }
-
-    createGradient() {
-        // Create a canvas for the gradient
-        const gradientCanvas = document.createElement('canvas');
-        gradientCanvas.width = 60; // Length of the laser
-        gradientCanvas.height = 6; // Width of the laser
-        const gradientCtx = gradientCanvas.getContext('2d');
-
-        // Create a gradient
-        const gradient = gradientCtx.createLinearGradient(0, 0, 60, 0);
-        gradient.addColorStop(0, 'rgba(255, 0, 0, 0)');
-        gradient.addColorStop(0.3, 'rgba(255, 0, 0, 0.5)');
-        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.7, 'rgba(255, 0, 0, 0.5)');
-        gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
-
-        // Apply the gradient
-        gradientCtx.fillStyle = gradient;
-        gradientCtx.fillRect(0, 0, 60, 6);
-
-        // Store the gradient canvas
-        this.gradient = gradientCanvas;
     }
 
     update() {
@@ -63,17 +38,22 @@ export class Laser {
     }
 
     draw(ctx, camera) {
-        console.log(`Drawing laser - x: ${this.x}, y: ${this.y}, camera: ${camera.x}, ${camera.y}`); // Add this line
-        if (!this.isHit && this.gradient) {
+        console.log(`Drawing laser - x: ${this.x}, y: ${this.y}, camera: ${camera.x}, ${camera.y}`);
+        if (!this.isHit) {
             ctx.save();
-            ctx.translate(this.x - camera.x, this.y - camera.y);
-            ctx.rotate(this.angle);
-            ctx.drawImage(this.gradient, 0, -3);
+            ctx.strokeStyle = 'rgb(255, 50, 50)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(this.x - camera.x, this.y - camera.y);
+            ctx.lineTo(
+                this.x + Math.cos(this.angle) * this.width - camera.x,
+                this.y + Math.sin(this.angle) * this.width - camera.y
+            );
+            ctx.stroke();
             ctx.restore();
         } else if (this.hitPosition) {
-            // Optionally, draw the laser up to the hit position
             ctx.strokeStyle = 'rgb(255, 50, 50)';
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(this.x - camera.x, this.y - camera.y);
             ctx.lineTo(
