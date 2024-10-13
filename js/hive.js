@@ -3,10 +3,16 @@ export class Hive {
     constructor(x, y, assets) {
       this.x = x;
       this.y = y;
-      this.width = 200; // Increased from 100
-      this.height = 200; // Increased from 100
+      this.width = 300; // Increased from 200
+      this.height = 300; // Increased from 200
       this.health = 100;
-      this.image = assets.getAsset('hive.png');
+      this.hiveType = this.getRandomHiveType();
+      this.image = assets.getAsset(`${this.hiveType}.png`);
+    }
+  
+    getRandomHiveType() {
+      const types = ['hive1', 'hive2', 'hive3', 'hive4'];
+      return types[Math.floor(Math.random() * types.length)];
     }
   
     draw(ctx, camera) {

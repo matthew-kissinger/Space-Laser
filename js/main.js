@@ -41,14 +41,20 @@ window.addEventListener('resize', resizeCanvas);
 const assetLoader = new AssetLoader();
 const imagePaths = [
   'spaceship.png',
-  'alien.png',
+  'alien1.png',
+  'alien2.png',
+  'alien3.png',
   'health.png',
   'basehealth.png',
   'laserpowerup.png',
   'background.png',
   'base.png',
-  'hive.png',
+  'hive1.png',
+  'hive2.png',
+  'hive3.png',
+  'hive4.png',
   'laser_tower.png',
+  'inside_space_station.png',
 ];
 
 // Load assets and initialize the game
@@ -71,3 +77,12 @@ export function startNewGame() {
   startLevel(1);
   soundManager.playBackground();
 }
+
+// Add this function to update camera position
+export function updateCamera() {
+  camera.x = Math.max(0, Math.min(player.x - WIDTH / 2, MAP_WIDTH - WIDTH));
+  camera.y = Math.max(0, Math.min(player.y - HEIGHT / 2, MAP_HEIGHT - HEIGHT));
+}
+
+// Call updateCamera in your game loop
+

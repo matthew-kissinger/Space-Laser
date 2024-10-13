@@ -8,8 +8,8 @@ export class Player {
   constructor(x, y, assets) {
     this.x = x;
     this.y = y;
-    this.width = 100; // Increased from 50
-    this.height = 100; // Increased from 50
+    this.width = 150; // Increased from 100
+    this.height = 150; // Increased from 100
     this.speed = 5;
     this.health = 100;
     this.laserCount = 1;

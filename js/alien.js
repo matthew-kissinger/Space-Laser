@@ -3,13 +3,41 @@ export class Alien {
     constructor(x, y, target, assets) {
       this.x = x;
       this.y = y;
-      this.width = 80; // Increased from 40
-      this.height = 80; // Increased from 40
-      this.speed = 2;
       this.target = target; // Could be Player or Base
-      this.health = 30;
-      this.alienType = Math.random() < 0.5 ? 'melee' : 'ranged'; // For varying behaviors
-      this.image = assets.getAsset('alien.png');
+      this.alienType = this.getRandomAlienType();
+      this.setAlienProperties(assets);
+    }
+  
+    getRandomAlienType() {
+      const types = ['alien1', 'alien2', 'alien3'];
+      return types[Math.floor(Math.random() * types.length)];
+    }
+
+    setAlienProperties(assets) {
+      switch(this.alienType) {
+        case 'alien1':
+          this.width = 150;
+          this.height = 150;
+          this.speed = 1;
+          this.health = 50;
+          this.damage = 20;
+          break;
+        case 'alien2':
+          this.width = 90;
+          this.height = 90;
+          this.speed = 3;
+          this.health = 20;
+          this.damage = 5;
+          break;
+        case 'alien3':
+          this.width = 120;
+          this.height = 120;
+          this.speed = 2;
+          this.health = 30;
+          this.damage = 10;
+          break;
+      }
+      this.image = assets.getAsset(`${this.alienType}.png`);
     }
   
     update() {
@@ -28,10 +56,18 @@ export class Alien {
       // Draw Health Bar
       const healthBarWidth = this.width;
       const healthBarHeight = 5;
-      const healthRatio = this.health / 30;
+      const healthRatio = this.health / this.getMaxHealth();
       ctx.fillStyle = 'red';
       ctx.fillRect(this.x - camera.x, this.y - camera.y - 10, healthBarWidth, healthBarHeight);
       ctx.fillStyle = 'green';
       ctx.fillRect(this.x - camera.x, this.y - camera.y - 10, healthRatio * healthBarWidth, healthBarHeight);
     }
-  }
+
+    getMaxHealth() {
+      switch(this.alienType) {
+        case 'alien1': return 50;
+        case 'alien2': return 20;
+        case 'alien3': return 30;
+      }
+    }
+}

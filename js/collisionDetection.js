@@ -56,7 +56,7 @@ function checkAlienPlayerCollisions() {
   for (let i = aliens.length - 1; i >= 0; i--) {
     const alien = aliens[i];
     if (rectCollision(alien, player)) {
-      player.health -= 10;
+      player.health -= alien.damage; // Use the alien's damage property
       aliens.splice(i, 1);
       explosions.push(new Explosion(alien.x + alien.width / 2, alien.y + alien.height / 2));
       if (player.health <= 0) {
@@ -70,7 +70,7 @@ function checkAlienBaseCollisions() {
   for (let i = aliens.length - 1; i >= 0; i--) {
     const alien = aliens[i];
     if (rectCollision(alien, base)) {
-      base.health -= 10;
+      base.health -= alien.damage; // Use the alien's damage property
       aliens.splice(i, 1);
       explosions.push(new Explosion(alien.x + alien.width / 2, alien.y + alien.height / 2));
       if (base.health <= 0) {

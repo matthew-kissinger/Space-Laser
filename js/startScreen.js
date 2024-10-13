@@ -7,10 +7,15 @@ import { startNewGame } from './main.js';
 let showInstructions = false;
 let assetLoader;
 let stars = [];
+let insideSpaceStationImage;
 
 export function initStartScreen(loader) {
     assetLoader = loader;
     createStars();
+    insideSpaceStationImage = assetLoader.getAsset('inside_space_station.png');
+    if (!insideSpaceStationImage) {
+        console.error('Failed to load inside_space_station.png');
+    }
 }
 
 function createStars() {
@@ -149,9 +154,21 @@ export function drawGameOverScreen(ctx, WIDTH, HEIGHT) {
 }
 
 export function drawPauseScreen(ctx, WIDTH, HEIGHT) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    // Draw the inside_space_station image as background
+    if (insideSpaceStationImage) {
+        // Draw the image to cover the entire screen
+        ctx.drawImage(insideSpaceStationImage, 0, 0, WIDTH, HEIGHT);
+    } else {
+        // Fallback to a dark background if image is not loaded
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    }
+
+    // Add a semi-transparent overlay to ensure text is readable
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
+    // Draw the text
     ctx.fillStyle = '#FFD700';
     ctx.font = 'bold 60px "Orbitron", sans-serif';
     ctx.textAlign = 'center';
