@@ -15,10 +15,10 @@ export class Laser {
         this.lifetime = 3000;
         this.isHit = false;
         this.hitPosition = null;
+        this.glowIntensity = 1;
     }
 
     init(x, y, targetX, targetY, speed) {
-        console.log('Laser init values:', { x, y, targetX, targetY, speed });
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -26,14 +26,14 @@ export class Laser {
         this.creationTime = Date.now();
         this.isHit = false;
         this.hitPosition = null;
-        console.log('Laser after init:', this);
+        this.glowIntensity = 1;
     }
 
     update() {
         if (!this.isHit) {
             this.x += Math.cos(this.angle) * this.speed;
             this.y += Math.sin(this.angle) * this.speed;
-            console.log(`Laser updated - x: ${this.x}, y: ${this.y}`); // Add this line
+            this.glowIntensity = 0.7 + Math.sin(Date.now() * 0.01) * 0.3; // Pulsating glow effect
         }
     }
 
@@ -41,12 +41,10 @@ export class Laser {
         if (!this.isHit) {
             ctx.save();
             
-            // Define laser properties
-            const laserLength = this.width * 2; // Make the laser longer
-            const laserWidth = 6; // Increase the width of the laser
-            const glowWidth = 12; // Width of the glow effect
+            const laserLength = this.width * 2;
+            const laserWidth = 4;
+            const glowWidth = 12;
             
-            // Calculate end points
             const endX = this.x + Math.cos(this.angle) * laserLength;
             const endY = this.y + Math.sin(this.angle) * laserLength;
             
@@ -55,9 +53,9 @@ export class Laser {
                 this.x - camera.x, this.y - camera.y,
                 endX - camera.x, endY - camera.y
             );
-            gradient.addColorStop(0, 'rgba(255, 50, 50, 0)');
-            gradient.addColorStop(0.5, 'rgba(255, 100, 100, 0.7)');
-            gradient.addColorStop(1, 'rgba(255, 50, 50, 0)');
+            gradient.addColorStop(0, `rgba(255, 50, 50, 0)`);
+            gradient.addColorStop(0.5, `rgba(255, 100, 100, ${0.7 * this.glowIntensity})`);
+            gradient.addColorStop(1, `rgba(255, 50, 50, 0)`);
             
             ctx.strokeStyle = gradient;
             ctx.lineWidth = glowWidth;
@@ -68,7 +66,7 @@ export class Laser {
             ctx.stroke();
             
             // Draw the core of the laser
-            ctx.strokeStyle = 'rgb(255, 50, 50)';
+            ctx.strokeStyle = `rgb(255, ${50 + 205 * this.glowIntensity}, ${50 + 205 * this.glowIntensity})`;
             ctx.lineWidth = laserWidth;
             ctx.lineCap = 'round';
             ctx.beginPath();
@@ -76,27 +74,34 @@ export class Laser {
             ctx.lineTo(endX - camera.x, endY - camera.y);
             ctx.stroke();
             
-            // Draw pointed ends
-            ctx.fillStyle = 'rgb(255, 50, 50)';
-            ctx.beginPath();
-            ctx.arc(this.x - camera.x, this.y - camera.y, laserWidth / 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(endX - camera.x, endY - camera.y, laserWidth / 2, 0, Math.PI * 2);
-            ctx.fill();
+            // Draw energy particles
+            this.drawEnergyParticles(ctx, camera);
             
             ctx.restore();
         } else if (this.hitPosition) {
-            // Draw hit laser (you may want to adjust this part as well)
-            ctx.strokeStyle = 'rgb(255, 50, 50)';
-            ctx.lineWidth = 2;
+            // Draw hit effect
+            ctx.save();
+            ctx.translate(this.hitPosition.x - camera.x, this.hitPosition.y - camera.y);
+            ctx.fillStyle = `rgba(255, 100, 100, ${0.8 * this.glowIntensity})`;
             ctx.beginPath();
-            ctx.moveTo(this.x - camera.x, this.y - camera.y);
-            ctx.lineTo(
-                this.hitPosition.x - camera.x,
-                this.hitPosition.y - camera.y
-            );
-            ctx.stroke();
+            ctx.arc(0, 0, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    drawEnergyParticles(ctx, camera) {
+        const particleCount = 3;
+        for (let i = 0; i < particleCount; i++) {
+            const t = i / (particleCount - 1);
+            const x = this.x + (Math.cos(this.angle) * this.width * 2 * t);
+            const y = this.y + (Math.sin(this.angle) * this.width * 2 * t);
+            const size = 2 + Math.random() * 2;
+            
+            ctx.fillStyle = `rgba(255, 200, 200, ${0.7 * this.glowIntensity})`;
+            ctx.beginPath();
+            ctx.arc(x - camera.x, y - camera.y, size, 0, Math.PI * 2);
+            ctx.fill();
         }
     }
 
@@ -104,7 +109,6 @@ export class Laser {
         return Date.now() - this.creationTime > this.lifetime || this.isHit;
     }
 
-    // Call this method when the laser hits a target
     hit(position) {
         this.isHit = true;
         this.hitPosition = position;
